@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-// Usar URLs relativas - funciona em qualquer host
-const API_URL = '/api'
+// Usar URL do backend em produção
+const API_URL = 'https://pdf-house.onrender.com/api'
 
 export default {
   async convertPDF(file, formats) {
