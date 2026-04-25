@@ -1,10 +1,7 @@
 import axios from 'axios'
 
-// Detectar ambiente
-const isDevelopment = window.location.hostname === 'localhost'
-const API_URL = isDevelopment 
-  ? 'http://localhost:5000/api'
-  : `${window.location.origin}/api`
+// Usar URLs relativas - funciona em qualquer host
+const API_URL = '/api'
 
 export default {
   async convertPDF(file, formats) {

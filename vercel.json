@@ -1,7 +1,17 @@
 {
-  "experimentalServices": {
-    "web": {
-      "routePrefix": "/"
+  "buildCommand": "cd frontend && npm install && npm run build",
+  "outputDirectory": "frontend/dist",
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/converter.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
+  ],
+  "env": {
+    "PYTHONUNBUFFERED": "1"
   }
 }
