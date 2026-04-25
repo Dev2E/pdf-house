@@ -17,6 +17,8 @@ class PDFConverter:
     def compress_pdf(self):
         """Comprime PDF reduzindo tamanho do arquivo."""
         try:
+            from pathlib import Path as PathlibPath
+            
             reader = PdfReader(self.pdf_path)
             writer = PdfWriter()
             
@@ -25,7 +27,12 @@ class PDFConverter:
                 writer.add_page(page)
             
             output_filename = f"{self.pdf_filename}_compressed.pdf"
-            output_path = os.path.join('./temp/output', output_filename)
+            output_dir = os.path.dirname(self.pdf_path)
+            output_path = os.path.join(output_dir, '..', 'output', output_filename)
+            output_path = os.path.abspath(output_path)
+            
+            # Garantir que o diretório existe
+            os.makedirs(os.path.dirname(output_path), exist_ok=True)
             
             # Usar compressão ao escrever
             with open(output_path, 'wb') as output_file:
@@ -54,10 +61,14 @@ class PDFConverter:
                 return None, "Nenhuma página foi convertida"
             
             output_files = []
+            output_dir = os.path.dirname(self.pdf_path)
+            output_dir = os.path.join(output_dir, '..', 'output')
+            output_dir = os.path.abspath(output_dir)
+            os.makedirs(output_dir, exist_ok=True)
             
             for i, image in enumerate(images):
                 output_filename = f"{self.pdf_filename}_page_{i+1:03d}.{format.lower()}"
-                output_path = os.path.join('./temp/output', output_filename)
+                output_path = os.path.join(output_dir, output_filename)
                 
                 try:
                     if format.upper() == 'JPG':
@@ -97,7 +108,11 @@ class PDFConverter:
                     text += extracted + "\n"
             
             output_filename = f"{self.pdf_filename}.txt"
-            output_path = os.path.join('./temp/output', output_filename)
+            output_dir = os.path.dirname(self.pdf_path)
+            output_dir = os.path.join(output_dir, '..', 'output')
+            output_dir = os.path.abspath(output_dir)
+            os.makedirs(output_dir, exist_ok=True)
+            output_path = os.path.join(output_dir, output_filename)
             
             with open(output_path, 'w', encoding='utf-8') as f:
                 f.write(text)
@@ -120,7 +135,11 @@ class PDFConverter:
                     doc.add_paragraph(text)
             
             output_filename = f"{self.pdf_filename}.docx"
-            output_path = os.path.join('./temp/output', output_filename)
+            output_dir = os.path.dirname(self.pdf_path)
+            output_dir = os.path.join(output_dir, '..', 'output')
+            output_dir = os.path.abspath(output_dir)
+            os.makedirs(output_dir, exist_ok=True)
+            output_path = os.path.join(output_dir, output_filename)
             doc.save(output_path)
             
             return [output_path], None
@@ -147,7 +166,11 @@ class PDFConverter:
                             row += 1
             
             output_filename = f"{self.pdf_filename}.xlsx"
-            output_path = os.path.join('./temp/output', output_filename)
+            output_dir = os.path.dirname(self.pdf_path)
+            output_dir = os.path.join(output_dir, '..', 'output')
+            output_dir = os.path.abspath(output_dir)
+            os.makedirs(output_dir, exist_ok=True)
+            output_path = os.path.join(output_dir, output_filename)
             wb.save(output_path)
             
             return [output_path], None

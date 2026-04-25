@@ -4,7 +4,7 @@ import tempfile
 from datetime import datetime, timedelta
 import mimetypes
 
-TEMP_DIR = os.getenv('TEMP_DIR', './temp')
+TEMP_DIR = os.path.abspath(os.getenv('TEMP_DIR', './temp'))
 MAX_FILE_SIZE = int(os.getenv('MAX_FILE_SIZE', 52428800))  # 50MB default
 
 def ensure_temp_dir():
