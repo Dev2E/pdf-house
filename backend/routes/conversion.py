@@ -25,9 +25,13 @@ def convert_pdf():
     file = request.files['file']
     formats = request.form.getlist('formats')
     
+    # Debug log
+    print(f"DEBUG: Formatos recebidos: {formats}, tipos: {[type(f) for f in formats]}")
+    
     # Validar formatos
     invalid_formats = [f for f in formats if f.upper() not in ALLOWED_FORMATS]
     if invalid_formats:
+        print(f"DEBUG: Formatos inválidos: {invalid_formats}")
         return jsonify({'error': f'Formatos inválidos: {invalid_formats}'}), 400
     
     # Salvar arquivo enviado
