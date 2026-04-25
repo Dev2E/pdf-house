@@ -10,6 +10,9 @@
         </p>
       </section>
 
+      <!-- Advertisement Banner -->
+      <AdBanner :show-ads="true" />
+
       <!-- Conversion Interface -->
       <section class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         <!-- Main Tool Area -->
@@ -103,18 +106,23 @@
           </ul>
         </aside>
       </section>
+
+      <!-- Bottom Advertisement Banner -->
+      <AdBanner :show-ads="true" />
     </main>
   </div>
 </template>
 
 <script>
 import ConversionStatus from '../components/ConversionStatus.vue'
+import AdBanner from '../components/AdBanner.vue'
 import conversionService from '../services/conversionService.js'
 
 export default {
   name: 'ConverterPage',
   components: {
-    ConversionStatus
+    ConversionStatus,
+    AdBanner
   },
   data() {
     return {
