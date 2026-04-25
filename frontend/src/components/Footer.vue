@@ -10,18 +10,24 @@
       
       <!-- Links -->
       <nav class="flex flex-wrap justify-center gap-6">
-        <a class="font-['Inter'] text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 hover:underline transition-all focus:ring-2 focus:ring-blue-500 outline-none" href="#">
+        <button 
+          @click="$emit('navigate', 'termos')"
+          class="font-['Inter'] text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 hover:underline transition-all focus:ring-2 focus:ring-blue-500 outline-none cursor-pointer bg-transparent border-none"
+        >
           Termos de Uso
-        </a>
-        <a class="font-['Inter'] text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 hover:underline transition-all focus:ring-2 focus:ring-blue-500 outline-none" href="#">
+        </button>
+        <button 
+          @click="$emit('navigate', 'privacidade')"
+          class="font-['Inter'] text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 hover:underline transition-all focus:ring-2 focus:ring-blue-500 outline-none cursor-pointer bg-transparent border-none"
+        >
           Privacidade
-        </a>
-        <a class="font-['Inter'] text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 hover:underline transition-all focus:ring-2 focus:ring-blue-500 outline-none" href="#">
+        </button>
+        <button 
+          @click="$emit('navigate', 'seguranca')"
+          class="font-['Inter'] text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 hover:underline transition-all focus:ring-2 focus:ring-blue-500 outline-none cursor-pointer bg-transparent border-none"
+        >
           Segurança
-        </a>
-        <a class="font-['Inter'] text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 hover:underline transition-all focus:ring-2 focus:ring-blue-500 outline-none" href="#">
-          Contato
-        </a>
+        </button>
       </nav>
     </div>
   </footer>

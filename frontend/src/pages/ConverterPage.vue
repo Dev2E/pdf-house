@@ -138,7 +138,7 @@
           
           <ul class="flex flex-col gap-4 text-sm text-slate-600 dark:text-slate-400">
             <li><strong class="text-slate-900 dark:text-slate-100">Tamanho máximo:</strong> 50 MB</li>
-            <li><strong class="text-slate-900 dark:text-slate-100">Formatos:</strong> PNG, JPG, TXT, DOCX, XLSX, PPTX</li>
+            <li><strong class="text-slate-900 dark:text-slate-100">Formatos:</strong> PNG, JPG, TXT, DOCX, XLSX</li>
             <li><strong class="text-slate-900 dark:text-slate-100">Segurança:</strong> Arquivos deletados após 1 hora</li>
             <li><strong class="text-slate-900 dark:text-slate-100">Múltiplos formatos:</strong> Receba um ZIP</li>
           </ul>
@@ -165,8 +165,8 @@ export default {
   data() {
     return {
       selectedFile: null,
-      selectedFormats: ['DOCX'],
-      availableFormats: ['PNG', 'JPG', 'TXT', 'DOCX', 'XLSX', 'PPTX'],
+      selectedFormats: [],
+      availableFormats: ['PNG', 'JPG', 'TXT', 'DOCX', 'XLSX'],
       conversionStatus: 'idle',
       isConverting: false,
       errorMessage: ''
@@ -243,7 +243,7 @@ export default {
     },
     resetForm() {
       this.selectedFile = null
-      this.selectedFormats = ['DOCX']
+      this.selectedFormats = []
       this.conversionStatus = 'idle'
       this.errorMessage = ''
     },
