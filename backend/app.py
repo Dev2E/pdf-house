@@ -24,7 +24,8 @@ ensure_temp_dir()
 def index():
     return {
         'message': 'PDF Converter API',
-        'version': '1.0.0',
+        'version': '2.0.0',
+        'engine': 'pymupdf',
         'endpoints': {
             'convert': 'POST /api/convert',
             'health': 'GET /api/health'
