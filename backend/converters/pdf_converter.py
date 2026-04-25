@@ -24,23 +24,25 @@ class PDFConverter:
                 output_filename = f"{self.pdf_filename}_page_{i+1:03d}.{format.lower()}"
                 output_path = os.path.join('./temp/output', output_filename)
                 
-                if format.upper() == 'JPG':
-                    # Converter para RGB para JPG (sem transparência)
-                    if image.mode in ('RGBA', 'LA'):
-                        # Criar imagem branca como fundo
-                        background = Image.new('RGB', image.size, (255, 255, 255))
-                        # Extrair canal alpha e fazer composite
-                        alpha = image.split()[-1]
-                        background.paste(image.convert('RGB'), mask=alpha)
-                        background.save(output_path, 'JPEG', quality=95)
+                try:
+                    if format.upper() == 'JPG':
+                        # Converter para RGB para JPG
+                        if image.mode != 'RGB':
+                            # Se tiver alpha, criar fundo branco
+                            if image.mode in ('RGBA', 'LA', 'PA'):
+                                background = Image.new('RGB', image.size, (255, 255, 255))
+                                background.paste(image.convert('RGBA'), mask=image.convert('RGBA').split()[3])
+                                image = background
+                            else:
+                                image = image.convert('RGB')
+                        image.save(output_path, 'JPEG', quality=95)
                     else:
-                        # Converter para RGB se não estiver
-                        rgb_image = image.convert('RGB') if image.mode != 'RGB' else image
-                        rgb_image.save(output_path, 'JPEG', quality=95)
-                else:
-                    image.save(output_path, 'PNG')
-                
-                output_files.append(output_path)
+                        # PNG - manter como está
+                        image.save(output_path, 'PNG')
+                    
+                    output_files.append(output_path)
+                except Exception as page_error:
+                    return None, f"Erro ao salvar página {i+1}: {str(page_error)}"
             
             return output_files, None
         except Exception as e:

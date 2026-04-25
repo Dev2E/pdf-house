@@ -2,7 +2,10 @@
   <header class="fixed top-0 w-full z-50 border-b border-slate-200 dark:border-slate-800 shadow-sm bg-white/90 dark:bg-slate-950/90 backdrop-blur-md">
     <div class="max-w-[1120px] mx-auto px-4 md:px-8 h-16 flex justify-between items-center">
       <!-- Brand -->
-      <div class="flex items-center gap-2">
+      <div 
+        @click="$emit('navigate', 'conversor')"
+        class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
+      >
         <span class="text-xl font-black text-blue-600 dark:text-blue-400 tracking-tight font-['Inter'] antialiased text-slate-900 dark:text-slate-100">PDF HOUSE</span>
       </div>
       

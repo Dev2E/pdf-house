@@ -85,6 +85,8 @@
           <ConversionStatus 
             :status="conversionStatus"
             :error-message="errorMessage"
+            :progress="conversionProgress"
+            :estimated-time="estimatedTime"
             @close="resetForm"
           />
 
@@ -169,7 +171,10 @@ export default {
       availableFormats: ['PNG', 'JPG', 'TXT', 'DOCX', 'XLSX'],
       conversionStatus: 'idle',
       isConverting: false,
-      errorMessage: ''
+      errorMessage: '',
+      conversionProgress: 0,
+      estimatedTime: null,
+      progressInterval: null
     }
   },
   methods: {
@@ -211,6 +216,17 @@ export default {
       this.isConverting = true
       this.conversionStatus = 'loading'
       this.errorMessage = ''
+      this.conversionProgress = 0
+      this.estimatedTime = 30
+
+      // Simular progresso
+      this.progressInterval = setInterval(() => {
+        if (this.conversionProgress < 90) {
+          this.conversionProgress += Math.random() * 20
+          if (this.conversionProgress > 90) this.conversionProgress = 90
+          this.estimatedTime = Math.max(1, this.estimatedTime - 1)
+        }
+      }, 500)
 
       const result = await conversionService.convertPDF(
         this.selectedFile,
@@ -218,6 +234,9 @@ export default {
       )
 
       this.isConverting = false
+      clearInterval(this.progressInterval)
+      this.conversionProgress = 100
+      this.estimatedTime = null
 
       if (result.success) {
         this.conversionStatus = 'success'
@@ -246,6 +265,9 @@ export default {
       this.selectedFormats = []
       this.conversionStatus = 'idle'
       this.errorMessage = ''
+      this.conversionProgress = 0
+      this.estimatedTime = null
+      if (this.progressInterval) clearInterval(this.progressInterval)
     },
     handleCloseSuccess() {
       this.conversionStatus = 'idle'

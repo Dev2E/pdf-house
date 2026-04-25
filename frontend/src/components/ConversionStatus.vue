@@ -3,6 +3,15 @@
     <div v-if="status === 'loading'" class="status-container loading">
       <div class="spinner"></div>
       <p class="status-text">Convertendo seu PDF...</p>
+      <div class="progress-info" v-if="progress > 0">
+        <div class="progress-bar">
+          <div class="progress-fill" :style="{ width: progress + '%' }"></div>
+        </div>
+        <div class="progress-details">
+          <span class="progress-percent">{{ progress }}%</span>
+          <span class="progress-time" v-if="estimatedTime">~{{ estimatedTime }}s</span>
+        </div>
+      </div>
     </div>
     
     <div v-if="status === 'success'" class="status-container success">
@@ -35,6 +44,14 @@ export default {
     errorMessage: {
       type: String,
       default: 'Ocorreu um erro durante a conversão'
+    },
+    progress: {
+      type: Number,
+      default: 0
+    },
+    estimatedTime: {
+      type: Number,
+      default: null
     }
   },
   computed: {
@@ -135,5 +152,44 @@ export default {
 
 .error-button {
   background-color: #dc2626;
+}
+
+.progress-info {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: rgba(59, 130, 246, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  transition: width 0.3s ease;
+  border-radius: 4px;
+}
+
+.progress-details {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #1e40af;
+  padding: 0 4px;
+}
+
+.progress-percent {
+  font-weight: 600;
+}
+
+.progress-time {
+  opacity: 0.8;
 }
 </style>
