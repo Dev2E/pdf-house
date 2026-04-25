@@ -27,15 +27,16 @@ class PDFConverter:
                 if format.upper() == 'JPG':
                     # Converter para RGB para JPG (sem transparência)
                     if image.mode in ('RGBA', 'LA'):
-                        rgb_image = Image.new('RGB', image.size, (255, 255, 255))
-                        rgb_image.paste(image, mask=image.split()[-1])
-                        rgb_image.save(output_path, 'JPEG', quality=95)
-                    elif image.mode == 'P':
-                        # Modo paleta
-                        rgb_image = image.convert('RGB')
-                        rgb_image.save(output_path, 'JPEG', quality=95)
+                        # Criar imagem branca como fundo
+                        background = Image.new('RGB', image.size, (255, 255, 255))
+                        # Extrair canal alpha e fazer composite
+                        alpha = image.split()[-1]
+                        background.paste(image.convert('RGB'), mask=alpha)
+                        background.save(output_path, 'JPEG', quality=95)
                     else:
-                        image.save(output_path, 'JPEG', quality=95)
+                        # Converter para RGB se não estiver
+                        rgb_image = image.convert('RGB') if image.mode != 'RGB' else image
+                        rgb_image.save(output_path, 'JPEG', quality=95)
                 else:
                     image.save(output_path, 'PNG')
                 

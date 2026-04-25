@@ -9,7 +9,7 @@ from utils.file_handler import save_upload, remove_file, create_output_dir
 
 conversion_bp = Blueprint('conversion', __name__, url_prefix='/api')
 
-ALLOWED_FORMATS = ['PNG', 'JPG', 'TXT', 'DOCX', 'XLSX', 'PPTX']
+ALLOWED_FORMATS = ['PNG', 'JPG', 'TXT', 'DOCX', 'XLSX']
 
 @conversion_bp.route('/convert', methods=['POST'])
 def convert_pdf():
@@ -54,8 +54,6 @@ def convert_pdf():
                 files, error = converter.to_docx()
             elif format_upper == 'XLSX':
                 files, error = converter.to_xlsx()
-            elif format_upper == 'PPTX':
-                files, error = converter.to_pptx()
             
             if error:
                 errors.append(f"{format_upper}: {error}")
