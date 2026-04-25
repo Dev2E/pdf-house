@@ -9,12 +9,14 @@
       <SecurityPage v-if="activePage === 'seguranca'" />
     </main>
     <Footer @navigate="handleNavigate" />
+    <CookieBanner @navigate="handleNavigate" />
   </div>
 </template>
 
 <script>
 import Header from './components/Header.vue'
 import Footer from './components/Footer.vue'
+import CookieBanner from './components/CookieBanner.vue'
 import ConverterPage from './pages/ConverterPage.vue'
 import FAQPage from './pages/FAQPage.vue'
 import TermsPage from './pages/TermsPage.vue'
@@ -26,6 +28,7 @@ export default {
   components: {
     Header,
     Footer,
+    CookieBanner,
     ConverterPage,
     FAQPage,
     TermsPage,
