@@ -20,18 +20,14 @@ class PDFConverter:
             reader = PdfReader(self.pdf_path)
             writer = PdfWriter()
             
-            for page_num, page in enumerate(reader.pages):
-                page.compress_content_streams()
+            for page in reader.pages:
+                # Adicionar página ao writer (compressão padrão)
                 writer.add_page(page)
-            
-            # Comprimir streams também
-            writer.add_metadata({
-                '/Producer': 'PDF House Compressor'
-            })
             
             output_filename = f"{self.pdf_filename}_compressed.pdf"
             output_path = os.path.join('./temp/output', output_filename)
             
+            # Usar compressão ao escrever
             with open(output_path, 'wb') as output_file:
                 writer.write(output_file)
             
