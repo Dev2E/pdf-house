@@ -87,6 +87,44 @@
             :error-message="errorMessage"
             @close="resetForm"
           />
+
+          <!-- Success Dialog -->
+          <div 
+            v-if="conversionStatus === 'success'"
+            class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+            @click="resetForm"
+          >
+            <div 
+              class="bg-white dark:bg-slate-900 rounded-xl p-8 max-w-sm w-full shadow-2xl"
+              @click.stop
+            >
+              <div class="flex flex-col items-center gap-4">
+                <div class="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
+                  <svg class="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+                
+                <h3 class="text-xl font-bold text-slate-900 dark:text-slate-100">Pronto!</h3>
+                <p class="text-center text-slate-600 dark:text-slate-400">Seu arquivo foi convertido com sucesso.</p>
+                
+                <div class="w-full flex flex-col gap-3 pt-4">
+                  <button 
+                    @click="resetForm"
+                    class="w-full py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all active:scale-95"
+                  >
+                    Converter Outro
+                  </button>
+                  <button 
+                    @click="handleCloseSuccess"
+                    class="w-full py-3 px-6 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-900 dark:text-slate-100 font-semibold rounded-lg transition-all active:scale-95"
+                  >
+                    Fechar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Status Panel (Sidebar) -->
@@ -208,6 +246,9 @@ export default {
       this.selectedFormats = ['DOCX']
       this.conversionStatus = 'idle'
       this.errorMessage = ''
+    },
+    handleCloseSuccess() {
+      this.conversionStatus = 'idle'
     }
   }
 }
