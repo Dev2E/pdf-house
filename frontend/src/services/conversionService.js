@@ -22,7 +22,19 @@ export default {
       
       return { success: true, data: response.data }
     } catch (error) {
-      const errorMsg = error.response?.data?.error || error.message || 'Erro desconhecido'
+      // Blob error response precisa ser lido como texto
+      let errorMsg = error.message || 'Erro desconhecido'
+      if (error.response?.data instanceof Blob) {
+        try {
+          const text = await error.response.data.text()
+          const json = JSON.parse(text)
+          errorMsg = json.error || errorMsg
+        } catch {
+          errorMsg = `Erro ${error.response.status}`
+        }
+      } else if (error.response?.data?.error) {
+        errorMsg = error.response.data.error
+      }
       return { success: false, error: errorMsg }
     }
   },
