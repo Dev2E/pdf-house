@@ -246,10 +246,19 @@ export default {
         const link = document.createElement('a')
         link.href = url
         
+        const formatExt = {
+          'compress': 'pdf',
+          'png': 'png',
+          'jpg': 'jpg',
+          'txt': 'txt',
+          'docx': 'docx',
+          'xlsx': 'xlsx'
+        }
         const ext = this.selectedFormats.length === 1 
-          ? this.selectedFormats[0].toLowerCase()
+          ? (formatExt[this.selectedFormats[0].toLowerCase()] || this.selectedFormats[0].toLowerCase())
           : 'zip'
-        link.download = `${this.selectedFile.name.replace('.pdf', '')}_converted.${ext}`
+        const suffix = this.selectedFormats[0]?.toLowerCase() === 'compress' ? '_compressed' : '_converted'
+        link.download = `${this.selectedFile.name.replace('.pdf', '')}${suffix}.${ext}`
         
         document.body.appendChild(link)
         link.click()
