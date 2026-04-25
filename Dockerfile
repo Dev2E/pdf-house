@@ -2,11 +2,6 @@ FROM python:3.13-slim
 
 WORKDIR /app
 
-# Instalar dependências do sistema (poppler para pdf2image)
-RUN apt-get update && apt-get install -y \
-    poppler-utils \
-    && rm -rf /var/lib/apt/lists/*
-
 # Copiar arquivos de requisitos
 COPY backend/requirements.txt .
 

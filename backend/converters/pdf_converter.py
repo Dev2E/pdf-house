@@ -1,9 +1,8 @@
 import os
 import io
 from pathlib import Path
-from pdf2image import convert_from_path
+import fitz  # pymupdf
 from PyPDF2 import PdfReader, PdfWriter
-from PIL import Image
 from docx import Document
 from docx.shared import Pt
 from openpyxl import Workbook
@@ -43,58 +42,33 @@ class PDFConverter:
             return None, f"Erro ao comprimir PDF: {str(e)}"
     
     def to_images(self, format='PNG', dpi=150):
-        """Converte PDF para imagens (PNG ou JPG)."""
+        """Converte PDF para imagens (PNG ou JPG) usando PyMuPDF."""
         try:
-            # Tentar converter com poppler
-            try:
-                images = convert_from_path(self.pdf_path, dpi=dpi)
-            except Exception as convert_error:
-                # Se falhar, tentar com dpi menor
-                print(f"Erro ao converter com DPI {dpi}: {str(convert_error)}")
-                try:
-                    images = convert_from_path(self.pdf_path, dpi=100)
-                except Exception as retry_error:
-                    print(f"Erro ao converter com DPI 100: {str(retry_error)}")
-                    return None, f"Erro ao converter imagens: {str(convert_error)}"
-            
-            if not images:
-                return None, "Nenhuma página foi convertida"
-            
+            doc = fitz.open(self.pdf_path)
             output_files = []
             output_dir = os.path.dirname(self.pdf_path)
             output_dir = os.path.join(output_dir, '..', 'output')
             output_dir = os.path.abspath(output_dir)
             os.makedirs(output_dir, exist_ok=True)
-            
-            for i, image in enumerate(images):
+
+            zoom = dpi / 72
+            mat = fitz.Matrix(zoom, zoom)
+
+            for i, page in enumerate(doc):
+                pix = page.get_pixmap(matrix=mat)
                 output_filename = f"{self.pdf_filename}_page_{i+1:03d}.{format.lower()}"
                 output_path = os.path.join(output_dir, output_filename)
-                
-                try:
-                    if format.upper() == 'JPG':
-                        # Converter para RGB para JPG
-                        if image.mode != 'RGB':
-                            # Se tiver alpha, criar fundo branco
-                            if image.mode in ('RGBA', 'LA', 'PA'):
-                                background = Image.new('RGB', image.size, (255, 255, 255))
-                                rgb_image = image.convert('RGBA')
-                                background.paste(rgb_image, mask=rgb_image.split()[3])
-                                image = background
-                            else:
-                                image = image.convert('RGB')
-                        image.save(output_path, 'JPEG', quality=90)
-                    else:
-                        # PNG - manter como está
-                        image.save(output_path, 'PNG')
-                    
-                    output_files.append(output_path)
-                except Exception as page_error:
-                    print(f"Erro ao salvar página {i+1}: {str(page_error)}")
-                    return None, f"Erro ao salvar página {i+1}: {str(page_error)}"
-            
+
+                if format.upper() == 'JPG':
+                    pix.save(output_path, 'jpeg')
+                else:
+                    pix.save(output_path, 'png')
+
+                output_files.append(output_path)
+
+            doc.close()
             return output_files, None
         except Exception as e:
-            print(f"Erro geral ao converter imagens: {str(e)}")
             return None, f"Erro ao converter para imagens: {str(e)}"
     
     def to_text(self):
