@@ -1,6 +1,6 @@
 Flask==3.0.0
 flask-cors==4.0.0
-pymupdf
+PyMuPDF==1.27.2.3
 PyPDF2==3.0.1
 python-docx==0.8.11
 openpyxl==3.1.2
