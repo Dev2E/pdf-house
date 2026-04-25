@@ -9,7 +9,7 @@ from utils.file_handler import save_upload, remove_file, create_output_dir
 
 conversion_bp = Blueprint('conversion', __name__, url_prefix='/api')
 
-ALLOWED_FORMATS = ['PNG', 'JPG', 'TXT', 'DOCX', 'XLSX']
+ALLOWED_FORMATS = ['PNG', 'JPG', 'TXT', 'DOCX', 'XLSX', 'COMPRESS']
 
 @conversion_bp.route('/convert', methods=['POST'])
 def convert_pdf():
@@ -54,6 +54,8 @@ def convert_pdf():
                 files, error = converter.to_docx()
             elif format_upper == 'XLSX':
                 files, error = converter.to_xlsx()
+            elif format_upper == 'COMPRESS':
+                files, error = converter.compress_pdf()
             
             if error:
                 errors.append(f"{format_upper}: {error}")
@@ -88,6 +90,9 @@ def convert_pdf():
         return send_file(zip_path, as_attachment=True, download_name=zip_filename)
     
     except Exception as e:
+        import traceback
+        print(f"ERRO GERAL NA CONVERSÃO: {str(e)}")
+        print(traceback.format_exc())
         remove_file(filepath)
         return jsonify({'error': f'Erro no servidor: {str(e)}'}), 500
 
