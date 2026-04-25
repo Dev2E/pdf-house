@@ -3,13 +3,13 @@ FROM python:3.13-slim
 WORKDIR /app
 
 # Copiar arquivos de requisitos
-COPY requirements.txt .
+COPY backend/requirements.txt .
 
 # Instalar dependências Python
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar código
-COPY . .
+# Copiar código do backend
+COPY backend/ .
 
 # Expor porta
 EXPOSE 5000
