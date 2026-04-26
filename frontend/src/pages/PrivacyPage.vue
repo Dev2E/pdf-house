@@ -6,7 +6,7 @@
       <section class="text-center flex flex-col gap-3">
         <h1 class="text-5xl font-bold text-slate-900 dark:text-slate-100">Política de Privacidade</h1>
         <p class="text-lg text-slate-600 dark:text-slate-400">
-          Saiba como o PDF HOUSE coleta, usa e protege seus dados
+          Saiba como o SaintPDF coleta, usa e protege seus dados
         </p>
       </section>
 

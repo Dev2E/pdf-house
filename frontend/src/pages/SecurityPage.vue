@@ -6,7 +6,7 @@
       <section class="text-center flex flex-col gap-3">
         <h1 class="text-5xl font-bold text-slate-900 dark:text-slate-100">Segurança</h1>
         <p class="text-lg text-slate-600 dark:text-slate-400">
-          Saiba como o PDF HOUSE protege seus documentos e dados
+          Saiba como o SaintPDF protege seus documentos e dados
         </p>
       </section>
 
@@ -59,7 +59,7 @@
         <div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-200 dark:border-slate-800 flex flex-col gap-4">
           <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100">5. Conformidade</h2>
           <p class="text-slate-600 dark:text-slate-400">
-            O PDF HOUSE é desenvolvido com as melhores práticas de segurança da indústria e em conformidade com padrões internacionais de proteção de dados.
+            O SaintPDF é desenvolvido com as melhores práticas de segurança da indústria e em conformidade com padrões internacionais de proteção de dados.
           </p>
         </div>
 

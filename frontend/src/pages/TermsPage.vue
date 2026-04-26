@@ -6,7 +6,7 @@
       <section class="text-center flex flex-col gap-3">
         <h1 class="text-5xl font-bold text-slate-900 dark:text-slate-100">Termos de Uso</h1>
         <p class="text-lg text-slate-600 dark:text-slate-400">
-          Leia nossos termos e condições antes de usar o PDF HOUSE
+          Leia nossos termos e condições antes de usar o SaintPDF
         </p>
       </section>
 
@@ -16,7 +16,7 @@
         <div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-200 dark:border-slate-800 flex flex-col gap-4">
           <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100">1. Aceitação dos Termos</h2>
           <p class="text-slate-600 dark:text-slate-400">
-            Ao acessar e utilizar o PDF HOUSE, você concorda em cumprir com estes termos de uso. Se você não concordar com qualquer parte desses termos, por favor não utilize o serviço.
+            Ao acessar e utilizar o SaintPDF, você concorda em cumprir com estes termos de uso. Se você não concordar com qualquer parte desses termos, por favor não utilize o serviço.
           </p>
         </div>
 
@@ -24,7 +24,7 @@
         <div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-200 dark:border-slate-800 flex flex-col gap-4">
           <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100">2. Uso Permitido</h2>
           <p class="text-slate-600 dark:text-slate-400">
-            Você concorda em usar o PDF HOUSE apenas para fins legais e de forma que não infrinja os direitos de terceiros ou restrinja o uso e aproveitamento do serviço por terceiros.
+            Você concorda em usar o SaintPDF apenas para fins legais e de forma que não infrinja os direitos de terceiros ou restrinja o uso e aproveitamento do serviço por terceiros.
           </p>
           <ul class="list-disc list-inside space-y-2 text-slate-600 dark:text-slate-400">
             <li>Você não pode enviar malware ou conteúdo prejudicial</li>
@@ -37,7 +37,7 @@
         <div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-200 dark:border-slate-800 flex flex-col gap-4">
           <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100">3. Limitação de Responsabilidade</h2>
           <p class="text-slate-600 dark:text-slate-400">
-            O PDF HOUSE é fornecido "como está" sem garantias de qualquer tipo. Não garantimos que o serviço será ininterrupto ou livre de erros.
+            O SaintPDF é fornecido "como está" sem garantias de qualquer tipo. Não garantimos que o serviço será ininterrupto ou livre de erros.
           </p>
         </div>
 

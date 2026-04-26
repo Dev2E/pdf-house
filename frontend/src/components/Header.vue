@@ -6,8 +6,7 @@
         @click="$emit('navigate', 'conversor')"
         class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
       >
-        <span class="text-3xl">🍀</span>
-        <span class="text-xl font-black text-blue-600 dark:text-blue-400 tracking-tight font-['Inter'] antialiased text-slate-900 dark:text-slate-100">PDF HOUSE</span>
+        <img src="/logo.svg" alt="SaintPDF" class="h-10 w-auto" />
       </div>
       
       <!-- Navigation -->

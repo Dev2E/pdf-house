@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 100" width="320" height="100">
+  <defs>
+    <!-- Gradiente dourado do halo -->
+    <radialGradient id="haloGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFE566" stop-opacity="0.9"/>
+      <stop offset="60%" stop-color="#FFD700" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#FFD700" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="haloRing" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFEF80"/>
+      <stop offset="50%" stop-color="#FFD700"/>
+      <stop offset="100%" stop-color="#CC9900"/>
+    </radialGradient>
+    <!-- Gradiente branco/cinza do texto -->
+    <linearGradient id="textGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#dddddd"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Brilho difuso do halo -->
+  <ellipse cx="160" cy="18" rx="52" ry="18" fill="url(#haloGlow)"/>
+
+  <!-- Aro dourado (elipse externa + interna) -->
+  <ellipse cx="160" cy="22" rx="38" ry="11" fill="none" stroke="url(#haloRing)" stroke-width="7" stroke-linecap="round"/>
+  <!-- Reflexo claro no topo do halo -->
+  <ellipse cx="148" cy="17" rx="14" ry="3" fill="none" stroke="#FFFAAA" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+
+  <!-- Sombra preta do texto (contorno) -->
+  <text x="160" y="88"
+        font-family="'Georgia', 'Times New Roman', serif"
+        font-size="58" font-weight="900" font-style="italic"
+        text-anchor="middle"
+        fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"
+        paint-order="stroke">SaintPDF</text>
+
+  <!-- Sombra escura para profundidade -->
+  <text x="162" y="90"
+        font-family="'Georgia', 'Times New Roman', serif"
+        font-size="58" font-weight="900" font-style="italic"
+        text-anchor="middle"
+        fill="#1a1a1a" opacity="0.5">SaintPDF</text>
+
+  <!-- Texto principal branco -->
+  <text x="160" y="88"
+        font-family="'Georgia', 'Times New Roman', serif"
+        font-size="58" font-weight="900" font-style="italic"
+        text-anchor="middle"
+        fill="url(#textGrad)">SaintPDF</text>
+</svg>
