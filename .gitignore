@@ -53,6 +53,8 @@ instance/
 backend/temp/
 backend/temp/*
 !backend/temp/.gitkeep
+backend/output/
+backend/output/*
 
 # Node.js / Frontend
 node_modules/
