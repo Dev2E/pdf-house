@@ -1,55 +1,75 @@
 import os
-import shutil
-import tempfile
 from datetime import datetime, timedelta
-import mimetypes
+from pathlib import Path
 
 TEMP_DIR = os.path.abspath(os.getenv('TEMP_DIR', './temp'))
 MAX_FILE_SIZE = int(os.getenv('MAX_FILE_SIZE', 52428800))  # 50MB default
+
+# Extensões permitidas e seus magic bytes de validação (quando aplicável)
+ALLOWED_EXTENSIONS = {
+    'pdf', 'png', 'jpg', 'jpeg', 'webp', 'gif', 'bmp',
+    'docx', 'xlsx', 'pptx', 'txt', 'csv'
+}
+
+# Magic bytes para validação de tipos binários
+MAGIC_BYTES = {
+    'pdf':  (b'%PDF', 4),
+    'png':  (b'\x89PNG', 4),
+    'jpg':  (b'\xff\xd8\xff', 3),
+    'jpeg': (b'\xff\xd8\xff', 3),
+    'gif':  (b'GIF8', 4),
+    'webp': (b'RIFF', 4),
+    'bmp':  (b'BM', 2),
+    # Formatos Office e texto não têm magic bytes simples — validamos só extensão
+}
 
 def ensure_temp_dir():
     """Cria diretório temporário se não existir."""
     if not os.path.exists(TEMP_DIR):
         os.makedirs(TEMP_DIR)
 
-def validate_pdf(file):
-    """Valida se o arquivo é um PDF válido."""
+def get_file_extension(filename):
+    """Retorna extensão sem ponto em lowercase."""
+    return Path(filename).suffix.lstrip('.').lower()
+
+def validate_file(file):
+    """Valida tipo, tamanho e integridade básica do arquivo enviado."""
     if not file or file.filename == '':
         return False, "Nenhum arquivo enviado"
-    
-    # Validar extensão
-    if not file.filename.lower().endswith('.pdf'):
-        return False, "Arquivo deve ser um PDF"
-    
+
+    ext = get_file_extension(file.filename)
+    if ext not in ALLOWED_EXTENSIONS:
+        return False, f"Tipo de arquivo não suportado: .{ext}"
+
     # Validar tamanho
     file.seek(0, os.SEEK_END)
     file_size = file.tell()
     file.seek(0)
-    
     if file_size > MAX_FILE_SIZE:
         return False, f"Arquivo muito grande. Máximo: {MAX_FILE_SIZE / 1024 / 1024:.0f}MB"
-    
-    # Validar magic bytes do PDF
-    file.seek(0)
-    header = file.read(4)
-    file.seek(0)
-    
-    if header != b'%PDF':
-        return False, "Arquivo inválido. Não é um PDF"
-    
+
+    # Validar magic bytes quando disponível
+    if ext in MAGIC_BYTES:
+        magic, length = MAGIC_BYTES[ext]
+        header = file.read(length)
+        file.seek(0)
+        if not header.startswith(magic):
+            return False, f"Arquivo inválido ou corrompido"
+
     return True, "Válido"
 
 def save_upload(file):
     """Salva arquivo enviado em diretório temporário."""
     ensure_temp_dir()
-    
-    valid, msg = validate_pdf(file)
+
+    valid, msg = validate_file(file)
     if not valid:
         return None, msg
-    
-    filename = f"upload_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{file.filename}"
+
+    ext = get_file_extension(file.filename)
+    filename = f"upload_{datetime.now().strftime('%Y%m%d_%H%M%S')}.{ext}"
     filepath = os.path.join(TEMP_DIR, filename)
-    
+
     file.save(filepath)
     return filepath, "Arquivo salvo com sucesso"
 

@@ -4,9 +4,9 @@
     <main class="flex-grow max-w-[1120px] w-full mx-auto px-4 md:px-8 pt-[120px] pb-20 flex flex-col gap-12">
       <!-- Hero Section -->
       <section class="text-center flex flex-col items-center gap-3 max-w-2xl mx-auto">
-        <h1 class="text-5xl font-bold text-slate-900 dark:text-slate-100">Converta seus PDFs em segundos</h1>
+        <h1 class="text-5xl font-bold text-slate-900 dark:text-slate-100">Converta qualquer arquivo em segundos</h1>
         <p class="text-lg text-slate-600 dark:text-slate-400">
-          Ferramenta rápida e segura para transformação de documentos. Arraste, escolha o formato e processe instantaneamente.
+          PDF, imagens, Word, Excel, PowerPoint, CSV e muito mais. Arraste, escolha o formato e converta instantaneamente.
         </p>
       </section>
 
@@ -31,10 +31,11 @@
             </svg>
             <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-1">Arraste e solte seu arquivo aqui</h3>
             <p class="text-sm text-slate-600 dark:text-slate-400">ou clique para procurar no seu computador</p>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">PDF · PNG · JPG · WEBP · DOCX · XLSX · PPTX · TXT · CSV</p>
             <input 
               ref="fileInput"
               type="file" 
-              accept=".pdf" 
+              accept=".pdf,.png,.jpg,.jpeg,.webp,.gif,.bmp,.docx,.xlsx,.pptx,.txt,.csv" 
               @change="handleFileSelect"
               class="hidden"
             />
@@ -140,7 +141,8 @@
           
           <ul class="flex flex-col gap-4 text-sm text-slate-600 dark:text-slate-400">
             <li><strong class="text-slate-900 dark:text-slate-100">Tamanho máximo:</strong> 50 MB</li>
-            <li><strong class="text-slate-900 dark:text-slate-100">Formatos:</strong> PNG, JPG, TXT, DOCX, XLSX, COMPRESS</li>
+            <li><strong class="text-slate-900 dark:text-slate-100">Entrada:</strong> PDF, PNG, JPG, WEBP, GIF, BMP, DOCX, XLSX, PPTX, TXT, CSV</li>
+            <li><strong class="text-slate-900 dark:text-slate-100">Saída:</strong> depende do tipo enviado</li>
             <li><strong class="text-slate-900 dark:text-slate-100">Segurança:</strong> Arquivos deletados após 1 hora</li>
             <li><strong class="text-slate-900 dark:text-slate-100">Múltiplos formatos:</strong> Receba um ZIP</li>
           </ul>
@@ -168,7 +170,7 @@ export default {
     return {
       selectedFile: null,
       selectedFormats: [],
-      availableFormats: ['PNG', 'JPG', 'TXT', 'DOCX', 'XLSX', 'COMPRESS'],
+      availableFormats: [],
       conversionStatus: 'idle',
       isConverting: false,
       errorMessage: '',
@@ -178,24 +180,48 @@ export default {
     }
   },
   methods: {
+    SUPPORTED_CONVERSIONS() {
+      return {
+        pdf:  ['PNG', 'JPG', 'TXT', 'DOCX', 'XLSX', 'COMPRESS'],
+        png:  ['PDF', 'JPG', 'WEBP'],
+        jpg:  ['PDF', 'PNG', 'WEBP'],
+        jpeg: ['PDF', 'PNG', 'WEBP'],
+        webp: ['PDF', 'PNG', 'JPG'],
+        gif:  ['PDF', 'PNG', 'JPG'],
+        bmp:  ['PDF', 'PNG', 'JPG'],
+        docx: ['PDF', 'TXT'],
+        xlsx: ['PDF', 'CSV', 'TXT'],
+        pptx: ['PDF', 'TXT'],
+        txt:  ['PDF', 'DOCX'],
+        csv:  ['XLSX', 'TXT'],
+      }
+    },
+    getFileExtension(filename) {
+      return filename.split('.').pop().toLowerCase()
+    },
+    setFileAndFormats(file) {
+      this.selectedFile = file
+      this.errorMessage = ''
+      const ext = this.getFileExtension(file.name)
+      this.availableFormats = this.SUPPORTED_CONVERSIONS()[ext] || []
+      this.selectedFormats = this.availableFormats.length ? [this.availableFormats[0]] : []
+      if (!this.availableFormats.length) {
+        this.errorMessage = `Tipo de arquivo não suportado: .${ext}`
+        this.conversionStatus = 'error'
+        this.selectedFile = null
+      }
+    },
     handleDrop(e) {
       e.preventDefault()
       const files = e.dataTransfer.files
       if (files.length > 0) {
-        const file = files[0]
-        if (file.type === 'application/pdf') {
-          this.selectedFile = file
-        } else {
-          this.errorMessage = 'Por favor, selecione um arquivo PDF'
-          this.conversionStatus = 'error'
-        }
+        this.setFileAndFormats(files[0])
       }
     },
     handleFileSelect() {
       const file = this.$refs.fileInput.files[0]
       if (file) {
-        this.selectedFile = file
-        this.errorMessage = ''
+        this.setFileAndFormats(file)
       }
     },
     toggleFormat(format) {
@@ -228,7 +254,7 @@ export default {
         }
       }, 500)
 
-      const result = await conversionService.convertPDF(
+      const result = await conversionService.convertFile(
         this.selectedFile,
         this.selectedFormats
       )
@@ -245,20 +271,18 @@ export default {
         const url = window.URL.createObjectURL(result.data)
         const link = document.createElement('a')
         link.href = url
-        
-        const formatExt = {
-          'compress': 'pdf',
-          'png': 'png',
-          'jpg': 'jpg',
-          'txt': 'txt',
-          'docx': 'docx',
-          'xlsx': 'xlsx'
+
+        const baseName = this.selectedFile.name.replace(/\.[^.]+$/, '')
+        let downloadName
+        if (this.selectedFormats.length === 1) {
+          const fmt = this.selectedFormats[0].toLowerCase()
+          const ext = fmt === 'compress' ? 'pdf' : fmt
+          const suffix = fmt === 'compress' ? '_compressed' : '_converted'
+          downloadName = `${baseName}${suffix}.${ext}`
+        } else {
+          downloadName = `${baseName}_converted.zip`
         }
-        const ext = this.selectedFormats.length === 1 
-          ? (formatExt[this.selectedFormats[0].toLowerCase()] || this.selectedFormats[0].toLowerCase())
-          : 'zip'
-        const suffix = this.selectedFormats[0]?.toLowerCase() === 'compress' ? '_compressed' : '_converted'
-        link.download = `${this.selectedFile.name.replace('.pdf', '')}${suffix}.${ext}`
+        link.download = downloadName
         
         document.body.appendChild(link)
         link.click()
